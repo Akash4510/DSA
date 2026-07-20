@@ -103,6 +103,28 @@ _(Explanation: `~(1 << i)` creates a mask where EVERY bit is 1, except for the $
 n = n ^ (1 << i);
 ```
 
+**5. ISOLATE the lowest set bit (Leaves only the right-most 1)**
+
+```cpp
+int lowest = n & -n;
+```
+
+**6. CLEAR all bits from the lowest bit up to i**
+
+```cpp
+// (Creates a mask of 1s shifted over i times, e.g., 11110000)
+int mask = ~((1 << i) - 1);
+n = n & mask;
+```
+
+**7. CLEAR all bits from the highest bit down to i**
+
+```cpp
+// (Creates a mask of 1s on the right, e.g., 00001111)
+int mask = (1 << i) - 1;
+n = n & mask;
+```
+
 ---
 
 ## 🧙‍♂️ 4. Advanced Bit Magic Algorithms
