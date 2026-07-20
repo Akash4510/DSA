@@ -1,0 +1,84 @@
+# =========================================
+# OPERATING SYSTEM GENERATED FILES
+# =========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# =========================================
+# VISUAL STUDIO CODE
+# =========================================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# =========================================
+# C++ / C COMPILER OUTPUTS & BINARIES
+# =========================================
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (Linux/macOS)
+*.so
+*.so.*
+*.dylib
+
+# Executables / Windows binaries
+*.exe
+*.out
+*.app
+*.ilk
+*.pdb
+
+# =========================================
+# BUILD DIRECTORIES & CMAKE
+# =========================================
+build/
+bin/
+out/
+dist/
+target/
+.cache/
+.ninja_*
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake-build-*/
+*.cmake
+
+# =========================================
+# DEBUGGING & PROFILING
+# =========================================
+*.gcno
+*.gcda
+*.gcov
+.gdb_history
+valgrind.out*
+callgrind.out*
+
+# =========================================
+# LOGS & TEMPORARY FILES
+# =========================================
+*.log
+*.tmp
+*.temp
