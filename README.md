@@ -1,6 +1,6 @@
-# 🚀 C++ & Data Structures and Algorithms Journey
+# 🚀 Data Structures and Algorithms (C++)
 
-Welcome to my personal learning playground! This repository is my digital brain for mastering C++ and diving deep into Data Structures and Algorithms.
+Welcome to my personal learning playground! This repository is my digital brain for diving deep into Data Structures and Algorithms.
 
 It is a growing collection of my daily problem-solving attempts, scratchpads, custom implementations, and quick-reference cheat sheets as I sharpen my engineering intuition.
 
