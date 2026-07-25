@@ -82,3 +82,5 @@ callgrind.out*
 *.log
 *.tmp
 *.temp
+
+test.cpp
