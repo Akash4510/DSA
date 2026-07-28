@@ -90,25 +90,84 @@ Let $M = 1e9 + 7$.
 
 ---
 
-## 🚀 5. Fast Exponentiation ($O(\log N)$)
+## 🚀 5. Fast / Binary Exponentiation ($O(\log N)$)
 
-Calculating $A^B \pmod M$ natively takes $O(B)$ time. If $B$ is 1 Billion, your program will crash (TLE).
-**The Trick:** $A^{10} = (A^2)^5$. You can cut the exponent in half every step, calculating massive powers in ~30 CPU cycles.
+Calculating $A^B$ natively takes $O(B)$ time. If $B$ is 1 Billion, your program will crash (TLE).
+**The Trick:** $A^{10} = (A^2)^5$. You can cut the exponent in half every step, dropping the time complexity to $O(\log N)$.
+
+### 1. Recursive Fast Exponentiation (Handling Negatives)
+
+This is the standard recursive approach.
+**The Trap:** If a problem asks for exact floating-point calculation with negative exponents, you must invert the base and make the exponent positive. However, the minimum 32-bit integer is `-2,147,483,648`. If you try to make `INT_MIN` positive, it causes an integer overflow! You **must** cast the exponent to a `long long` first.
 
 ```cpp
-long long fastExponent(long long base, long long exp) {
+double fastExponent(double x, long long n) {
+    if (n == 0) return 1.0;
+
+    // If the exponent is negative, invert the base and make exponent positive.
+    // We use long long 'n' because turning INT_MIN to positive overflows a 32-bit int!
+    // Because x^(-n) = 1 / (x ^ n)
+    if (n < 0) return fastExponent(1.0 / x, -n);
+
+    double half = fastExponent(x, n / 2);
+
+    if (n % 2 == 0) {
+        return half * half;
+    } else {
+        return x * half * half;
+    }
+}
+```
+
+### 2. Binary Exponentiation (The Iterative Standard)
+
+This uses the exact same mathematical logic as above, but drops the Space Complexity to $O(1)$ by using a `while` loop and Bitwise Operators instead of the Call Stack.
+**The Trick:** Think in binary! $13$ is `1101` in binary, meaning $13 = 8 + 4 + 1$. Therefore, $x^{13} = x^8 \cdot x^4 \cdot x^1$. We continuously square the base, but only multiply it into our result when the current right-most bit is `1`.
+
+```cpp
+double fastExponentBinary(double x, int n) {
+    long long exp = n; // Cast to long long to prevent INT_MIN overflow
+
+    // Handle negative exponents
+    if (exp < 0) {
+        x = 1.0 / x;
+        exp = -exp;
+    }
+
+    double result = 1.0;
+    while (exp > 0) {
+        // If the right-most bit is 1 (meaning the exponent is odd)
+        if (exp & 1) result *= x;
+
+        // Square the base, roll the snowball! (x^1 -> x^2 -> x^4 -> x^8)
+        x *= x;
+
+        // Shift bits right by 1 (same as exp = exp / 2)
+        exp >>= 1;
+    }
+    return result;
+}
+```
+
+### 3. Modular Fast Exponentiation ($10^9 + 7$)
+
+In competitive programming, you are often asked to find $A^B \pmod M$. You cannot use `double` here. Everything must be calculated using integers (`long long`), and the modulo must be applied at **every single multiplication step** to prevent integer overflow.
+
+```cpp
+long long modularExponentiation(long long base, long long exp) {
     long long mod = 1e9 + 7;
     long long result = 1;
 
-    // Safety check: shrink base
+    // Safety check: shrink base immediately just in case it starts larger than mod
     base = base % mod;
 
     while (exp > 0) {
-        // If exponent is odd, multiply result by current base
+        // If exponent is odd, multiply result by current base and modulo immediately
         if (exp % 2 != 0) {
             result = (result * base) % mod;
         }
-        // Square the base, roll the snowball!
+
+        // Square the base and modulo immediately!
         base = (base * base) % mod;
 
         // Halve the exponent
@@ -117,8 +176,6 @@ long long fastExponent(long long base, long long exp) {
     return result;
 }
 ```
-
----
 
 ## 🧲 6. Modular Division & Fermat's Little Theorem
 
