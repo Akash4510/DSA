@@ -8,7 +8,13 @@ In DSA, problems often ask you to calculate massive numbers or count combination
 
 ## 🔢 1. Primality Testing ($O(\sqrt{N})$)
 
-You do not need to check all numbers from `1` to `N` to see if `N` is prime. Factors always come in pairs (e.g., for 36: $2 \times 18$, $3 \times 12$, $4 \times 9$, $6 \times 6$). The smallest factor in the pair will ALWAYS be $\le \sqrt{N}$.
+You do not need to check all numbers from `1` to `N` to see if `N` is prime. Factors always come in pairs. E.g., for 36:
+$2 \times 18$, $3 \times 12$, $4 \times 9$, $6 \times 6$,
+$9 \times 4$, $3 \times 12$, $18 \times 2$.
+
+If you notice the factors in the second half of the pair, they are just the reverse of the first half (for e.g, $4 \times 9$ in the first half is basically $9 \times 4$ in the second half). Therefore, you only need to check up to $\sqrt{N}$.
+
+The smallest factor in the pair will ALWAYS be $\le \sqrt{N}$.
 
 ```cpp
 bool isPrime(int n) {
