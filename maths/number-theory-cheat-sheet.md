@@ -8,11 +8,13 @@ In DSA, problems often ask you to calculate massive numbers or count combination
 
 ## 🔢 1. Primality Testing ($O(\sqrt{N})$)
 
-You do not need to check all numbers from `1` to `N` to see if `N` is prime. Factors always come in pairs. E.g., for 36:
-$2 \times 18$, $3 \times 12$, $4 \times 9$, $6 \times 6$,
-$9 \times 4$, $3 \times 12$, $18 \times 2$.
+`Note:` if `X` = `M x N`, then both `M` and `N` are the factors of `X`.
 
-If you notice the factors in the second half of the pair, they are just the reverse of the first half (for e.g, $4 \times 9$ in the first half is basically $9 \times 4$ in the second half). Therefore, you only need to check up to $\sqrt{N}$.
+Therefore, you do not need to check all numbers from `1` to `N` to see if `N` is prime. Factors always come in pairs. E.g., the factors of `36` are:
+`1 x 36`, `2 x 18`, `3 x 12`, `4 x 9`, `6 x 6`,
+`9 x 4`, `12 x 3`, `18 x 2`, `36 x 1`.
+
+If you notice the factors in the second half of the pair, they are just the reverse of the first half (for e.g, `4 x 9` in the first half is basically `9 x 4` in the second half). Which means, we got all the factors of `N` by just checking up to $\sqrt{N}$, which in this case is `6` ($\sqrt{36}$ = `6`).
 
 The smallest factor in the pair will ALWAYS be $\le \sqrt{N}$.
 
@@ -59,11 +61,22 @@ vector<bool> sieve(int n) {
 **GCD (Greatest Common Divisor):** The largest number that divides both `a` and `b`.
 **LCM (Least Common Multiple):** The smallest number that both `a` and `b` divide into.
 
+**Euclidean Algorithm:** The GCD of two numbers `a` and `b` is the same as the GCD of `b` and `a % b`. This is because if `d` divides both `a` and `b`, it must also divide `a - bq` for any integer `q`. Therefore, we can reduce the problem size by replacing the larger number with its remainder when divided by the smaller number.
+
+For example, to find `gcd(48, 18)`:
+
+1. `gcd(48, 18)` → `gcd(18, 48 % 18)` → `gcd(18, 12)`
+2. `gcd(18, 12)` → `gcd(12, 18 % 12)`
+3. `gcd(12, 6)` → `gcd(6, 12 % 6)` → `gcd(6, 0)` → `6`
+
+**The LCM Formula:** `lcm(a, b) = (a * b) / gcd(a, b)`
+Simply, the product of two numbers is equal to the product of their GCD and LCM. `a * b = gcd(a, b) * lcm(a, b)`
+
 - **The C++ Shortcut:** C++ has a built-in function `__gcd(a, b)` inside `<algorithm>`.
 - **The Manual Formula (Euclidean Algorithm $O(\log(\min(A, B)))$):**
 
 ```cpp
-// Recursive GCD
+// Recursive GCD, we can also implement it iteratively.
 int gcd(int a, int b) {
     if (b == 0) return a;
     return gcd(b, a % b);
@@ -72,6 +85,20 @@ int gcd(int a, int b) {
 // Formula for LCM (Always divide first to prevent integer overflow!)
 long long lcm(int a, int b) {
     return (a / gcd(a, b)) * 1LL * b;
+}
+```
+
+We can also use the Euclidean Algorithm to find GCD using subtraction, but it is slower than the modulo method. The subtraction method is only useful when you are not allowed to use the modulo operator.:
+
+```cpp
+// Implementing GCD using subtraction method (in an iterative way).
+// The same can be done recursively as well.
+int gcdSubtraction(int a, int b) {
+    while (a != b) {
+        if (a > b) a -= b;
+        else b -= a;
+    }
+    return a; // or return b; both are same
 }
 ```
 
@@ -93,10 +120,25 @@ Let $M = 1e9 + 7$.
 - **Subtraction (The C++ Negative Trap):**
   _C++ modulo can return negative numbers. You MUST add M before the final modulo._
   `ans = ((A % M) - (B % M) + M) % M;`
+- **Division (Fermat's Little Theorem):**
+  You **CANNOT** use the `/` symbol in modular arithmetic. `(A / B) % M` is completely illegal.
+  Instead, you must multiply by the **Modular Multiplicative Inverse**.
+
+  **Fermat's Theorem:** If $M$ is a prime number, the inverse of $B$ is $B^{M-2} \pmod M$.
+  - **The Code:** To calculate `(A / B) % M`, you use your Fast Exponentiation function!
+
+  ```cpp
+  // (A / B) % M
+  long long inverse = fastExponent(B, mod - 2);
+  long long answer = (A % mod * inverse) % mod;
+  ```
+
+  The **fastExponent** function is explained in the next section.
+  The **Modular Multiplicative Inverse** is also used in combinatorics to calculate $\frac{n!}{r!(n-r)!} \pmod M$.
 
 ---
 
-## 🚀 5. Fast / Binary Exponentiation ($O(\log N)$)
+## 🚀 5. Fast Exponentiation ($O(\log N)$)
 
 Calculating $A^B$ natively takes $O(B)$ time. If $B$ is 1 Billion, your program will crash (TLE).
 **The Trick:** $A^{10} = (A^2)^5$. You can cut the exponent in half every step, dropping the time complexity to $O(\log N)$.
@@ -181,19 +223,4 @@ long long modularExponentiation(long long base, long long exp) {
     }
     return result;
 }
-```
-
-## 🧲 6. Modular Division & Fermat's Little Theorem
-
-You **CANNOT** use the `/` symbol in modular arithmetic. `(A / B) % M` is completely illegal.
-Instead, you must multiply by the **Modular Multiplicative Inverse**.
-
-**Fermat's Theorem:** If $M$ is a prime number, the inverse of $B$ is $B^{M-2} \pmod M$.
-
-- **The Code:** To calculate `(A / B) % M`, you use your Fast Exponentiation function!
-
-```cpp
-// (A / B) % M
-long long inverse = fastExponent(B, mod - 2);
-long long answer = (A % mod * inverse) % mod;
 ```
