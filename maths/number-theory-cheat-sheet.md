@@ -120,7 +120,7 @@ Let $M = 1e9 + 7$.
 - **Subtraction (The C++ Negative Trap):**
   _C++ modulo can return negative numbers. You MUST add M before the final modulo._
   `ans = ((A % M) - (B % M) + M) % M;`
-- **Division (Fermat's Little Theorem):**
+- **🧲 Division (Fermat's Little Theorem):**
   You **CANNOT** use the `/` symbol in modular arithmetic. `(A / B) % M` is completely illegal.
   Instead, you must multiply by the **Modular Multiplicative Inverse**.
 
