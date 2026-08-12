@@ -30,12 +30,12 @@ protected:
     return (2 * i) + 2;
   }
 
-  bool isNotValid(int idx, int parentIdx) {
+  bool isValid(int idx, int parentIdx) {
     if (isMinHeap) {
-      return arr[parentIdx] > arr[idx];
+      return arr[parentIdx] < arr[idx];
     }
     else {
-      return arr[parentIdx] < arr[idx];
+      return arr[parentIdx] > arr[idx];
     }
   }
 
@@ -102,7 +102,7 @@ public:
     int currIdx = size() - 1;
     int parentIdx = getParentNodeIdx(currIdx);
 
-    while (currIdx > 0 && isNotValid(currIdx, parentIdx)) {
+    while (currIdx > 0 && !isValid(currIdx, parentIdx)) {
       swap(arr[currIdx], arr[parentIdx]);
       currIdx = parentIdx;
       parentIdx = getParentNodeIdx(currIdx);
@@ -116,11 +116,11 @@ public:
       int extremeIdx = currIdx; // Start by assuming the parent is the correct one
 
       // Check if left child is more extreme than the parent
-      if (leftIdx < size() && isNotValid(leftIdx, extremeIdx)) {
+      if (leftIdx < size() && !isValid(leftIdx, extremeIdx)) {
         extremeIdx = leftIdx;
       }
       // Check if right child is more extreme than whoever is currently the most extreme
-      if (rightIdx < size() && isNotValid(rightIdx, extremeIdx)) {
+      if (rightIdx < size() && !isValid(rightIdx, extremeIdx)) {
         extremeIdx = rightIdx;
       }
 
