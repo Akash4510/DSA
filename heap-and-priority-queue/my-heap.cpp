@@ -47,6 +47,7 @@ public:
   // }
 
   // O(N) Array Constructor
+  // !Floyd's Heapify
   Heap(bool isMin, const vector<int>& inputArr) : isMinHeap(isMin) {
     arr = inputArr; // Copy the array as-is
 
