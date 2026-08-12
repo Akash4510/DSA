@@ -16,17 +16,14 @@ protected:
   }
 
   int getParentNodeIdx(int i) {
-    checkBound(i);
     return (i - 1) / 2;
   }
 
   int getLeftNodeIdx(int i) {
-    checkBound(i);
     return (2 * i) + 1;
   }
 
   int getRightNodeIdx(int i) {
-    checkBound(i);
     return (2 * i) + 2;
   }
 
