@@ -7,7 +7,6 @@ using namespace std;
 class Heap {
 protected:
   vector<int> arr;
-  int maxSize;
   bool isMinHeap;
 
   void checkBound(int i) {
@@ -41,19 +40,17 @@ protected:
   }
 
 public:
-  Heap(bool isMin, int maxSize = 20) : maxSize(maxSize), isMinHeap(isMin) {
-    arr.reserve(maxSize);
-  }
+  Heap(bool isMin) : isMinHeap(isMin) {}
 
   // O(N LogN) Array Constructor
-  // Heap(bool isMin, vector<int>& inputArr) : maxSize(inputArr.size() * 2), isMinHeap(isMin) {
+  // Heap(bool isMin, vector<int>& inputArr) : isMinHeap(isMin) {
   //   for (int& n : inputArr) {
   //     push(n);
   //   }
   // }
 
   // O(N) Array Constructor
-  Heap(bool isMin, const vector<int>& inputArr) : maxSize(inputArr.size() * 2), isMinHeap(isMin) {
+  Heap(bool isMin, const vector<int>& inputArr) : isMinHeap(isMin) {
     arr = inputArr; // Copy the array as-is
 
     // Start from the last non-leaf node and sink everything down
@@ -141,13 +138,13 @@ public:
 
 class MinHeap : public Heap {
 public:
-  MinHeap(int maxSize) : Heap(true, maxSize) {}
+  MinHeap() : Heap(true) {}
   MinHeap(const vector<int>& inputArr) : Heap(true, inputArr) {}
 };
 
 class MaxHeap : public Heap {
 public:
-  MaxHeap(int maxSize) : Heap(false, maxSize) {}
+  MaxHeap() : Heap(false) {}
   MaxHeap(const vector<int>& inputArr) : Heap(false, inputArr) {}
 };
 
