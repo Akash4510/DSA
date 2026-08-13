@@ -3,6 +3,43 @@
 #include <unordered_map>
 #include <queue>
 
+//! O(N) solution - (THIS DOESN'T USES HEAP, BUT INSTEAD IT USES BUCKET SORT)
+// This solution takes advantages of the fact that the array indices are always sorted
+// And the maximum frequency of an element can be N.
+// So we basically create 2d array (array of frequency buckets),
+// Where array[i] denotes the bucket of elements having frequency i
+std::vector<int> topKFrequent(std::vector<int>& nums, int k) {
+  int n = nums.size();
+  std::unordered_map<int, int> freqMap;
+
+  // Step 1: Count the frequencies O(N)
+  for (int num : nums) {
+    freqMap[num]++;
+  }
+
+  // Step 2: Create buckets. Size is n+1 because max frequency is n.
+  // The index is the frequency, the vector holds the numbers.
+  std::vector<std::vector<int>> buckets(n + 1);
+  for (auto it : freqMap) {
+    int num = it.first;
+    int freq = it.second;
+    buckets[freq].push_back(num); // Place number in its frequency bucket
+  }
+
+  // Step 3: Traverse buckets from right to left (highest frequency to lowest) O(N)
+  std::vector<int> result;
+  for (int i = n; i >= 0; i--) {
+    for (int num : buckets[i]) {
+      result.push_back(num);
+      if (result.size() == k) {
+        return result; // We found our top K elements!
+      }
+    }
+  }
+
+  return result;
+}
+
 // ==========================================
 // Top K Frequent Elements (LeetCode 347)
 // Optimal Solution: O(N log K) Time | O(N) Space
