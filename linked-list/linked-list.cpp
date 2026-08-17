@@ -137,3 +137,47 @@ Node* LinkedList::reverseNode(Node* prev, Node* curr) {
 void LinkedList::reverseRec() {
   head = reverseNode(nullptr, head);
 }
+
+void LinkedList::reverseSegment(int i, int j) {
+  // 1. Corrected Boundary Checks (1-based indexing)
+  if (i < 1 || i >= j || j > size) return;
+
+  int c = 0;
+  Node* curr = head;
+  Node* prev = nullptr;
+
+  // 2. Skip 'i-1' nodes to reach the start of the segment
+  while (c < i - 1) {
+    prev = curr;
+    curr = curr->next;
+    c++;
+  }
+
+  // 3. Anchor our boundaries
+  Node* beforeNode = prev;
+  Node* fromNode = curr;
+
+  prev = nullptr;
+  Node* next = nullptr;
+
+  // 4. Standard Reversal for the segment length
+  while (c < j) {
+    next = curr->next;
+    curr->next = prev;
+    prev = curr;
+    curr = next;
+    c++;
+  }
+
+  // 5. The Rewire (With the Head Edge-Case Fix!)
+  if (beforeNode != nullptr) {
+    beforeNode->next = prev; // Connect left boundary
+  }
+  else {
+    head = prev;             // If we reversed from the start, update the head!
+  }
+
+  fromNode->next = curr;     // Connect right boundary
+}
+
+void LinkedList::reverseSegmentRec(int i, int j) {}

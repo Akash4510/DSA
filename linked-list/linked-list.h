@@ -29,4 +29,6 @@ public:
   int pop_front();
   void reverse();
   void reverseRec();
+  void reverseSegment(int, int);
+  void reverseSegmentRec(int, int);
 };
