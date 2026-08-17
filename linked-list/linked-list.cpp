@@ -180,4 +180,57 @@ void LinkedList::reverseSegment(int i, int j) {
   fromNode->next = curr;     // Connect right boundary
 }
 
-void LinkedList::reverseSegmentRec(int i, int j) {}
+// =================================================================
+// HELPER 1: Reverses the first 'N' nodes starting from 'curr'
+// =================================================================
+Node* LinkedList::reverseFirstN(Node* curr, int n) {
+  // Base Case: We reached the end of the segment we want to reverse.
+  if (n == 1) {
+    // Save the rest of the list so it isn't lost!
+    successor = curr->next;
+    // Return this node, as it is the brand new head of the reversed segment
+    return curr;
+  }
+
+  // Recursively burrow down to the end of the segment
+  Node* newHead = reverseFirstN(curr->next, n - 1);
+
+  // Standard recursive reversal of the pointer
+  curr->next->next = curr;
+
+  // ATTACHMENT: Point the current node to the saved rest of the list.
+  // As the call stack unwinds, this correctly leaves the final tail 
+  // pointing to the un-reversed remainder of the list.
+  curr->next = successor;
+
+  return newHead;
+}
+
+// =================================================================
+// HELPER 2: Burrows down to the starting point of the segment
+// =================================================================
+Node* LinkedList::reverseBetween(Node* curr, int m, int n) {
+  // Base Case: We have reached the starting node of the segment!
+  // Now, we just need to reverse the first 'n' elements from this point.
+  if (m == 1) {
+    return reverseFirstN(curr, n);
+  }
+
+  // We aren't at the start yet. Move forward by 1 node.
+  // Because we moved forward, our target segment is now relatively 
+  // 1 step closer, so we subtract 1 from both m and n.
+  curr->next = reverseBetween(curr->next, m - 1, n - 1);
+
+  return curr;
+}
+
+// =================================================================
+// PUBLIC API: The method called by your main() function
+// =================================================================
+void LinkedList::reverseSegmentRec(int i, int j) {
+  // Standard safety boundaries (1-based indexing)
+  if (i < 1 || i >= j || j > size || head == nullptr) return;
+
+  // Start the recursive chain at the head
+  head = reverseBetween(head, i, j);
+}

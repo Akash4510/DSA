@@ -14,6 +14,9 @@ private:
   int size;
 
   Node* reverseNode(Node*, Node*);
+  Node* reverseFirstN(Node* curr, int n);
+  Node* successor = nullptr;
+  Node* reverseBetween(Node* curr, int m, int n);
 
 public:
   LinkedList();
